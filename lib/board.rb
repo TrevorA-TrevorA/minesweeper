@@ -19,6 +19,21 @@ class Board
         grid[x][y].mine = true
     end
     
+    def render
+       rend = grid.map do |row| 
+            row.map do |tile|
+                if tile.status == "hidden"
+                    tile.flagged == false ? "*" : :F
+                else
+                    tile.adjacent_mines
+                end
+            end
+        end
+
+        puts "  #{(0..8).to_a.join(" ")}"
+        rend.each_with_index { |row, i| puts"#{i} " + row.join(" ") }
+    end
+
 end
     
         
