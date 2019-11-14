@@ -4,9 +4,12 @@ require_relative "tile"
 class Board
 
     attr_accessor :grid
+    attr_reader :tiles
 
     def initialize
         @grid = Array.new(9){Array.new(9){Tile.new(self)}}
+        @tiles = tile_list
+        @game = Game.new(self)
     end
 
     def set
@@ -69,6 +72,14 @@ class Board
         (0..8).each do |row|
             (0..8).each { |col| grid[row][col].position = [row, col] }
         end
+    end
+
+    def tile_list
+        list = []
+        (0..8).each do |row|
+            (0..8).each { |col| list << self[row, col] }
+        end
+        list
     end
 
 end
