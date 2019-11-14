@@ -12,7 +12,7 @@ class Game
     end
 
     def won?
-        mineless_tiles = board.tile_list.select { |tile| tile.mine == "false" }
+        mineless_tiles = board.tiles { |tile| tile.mine == "false" }
         mineless_tiles.all? { |tile| tile.status == "revealed" }
     end
 
@@ -31,14 +31,21 @@ class Game
         end
     end
 
+    def run
+        self.board.set
+        turn
+    end
+
     def select
         if selected_tile.mine == false
             reveal
             clear_adjacent if !adjacent_mines?
-            turn
+            puts "YOU WIN" if won?
+            turn if !won?
         else
-            puts "BOOM!"
-            game_over
+            puts "Game Over"
+            board.display_mines
+            game_over = true
         end
     end
 
@@ -79,11 +86,6 @@ class Game
             puts "invalid entry"
             get_coordinates
         end
-    end
-
-    def game_over
-        puts "Game Over"
-        board.display_mines
     end
 
     def valid_coords?(coords)
