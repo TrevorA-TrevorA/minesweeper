@@ -9,6 +9,18 @@ class Board
         @grid = Array.new(9){Array.new(9){Tile.new(self)}}
     end
 
+    def set
+        position
+        set_mines
+        set_mine_count
+    end
+
+    def set_mine_count
+        (0..8).each do |row|
+            (0..8).each { |col| self[row, col].mine_count }
+        end
+    end
+
     def set_mines
         until grid.flatten.count { |tile| tile.mine == true } == 27 do
             plant_mine([rand(8), rand(8)])
@@ -24,7 +36,7 @@ class Board
        rend = grid.map do |row| 
             row.map do |tile|
                 if tile.status == "hidden"
-                    tile.flagged == false ? "*" : :F
+                    tile.flagged == false ? "_" : :F
                 else
                     tile.adjacent_mines
                 end
@@ -37,7 +49,7 @@ class Board
 
     def display_mines
         rend = grid.map do |row| 
-            row.map { |tile| tile.mine == true ? :M : tile.adjacent_mines }
+            row.map { |tile| tile.mine == true ? "*" : tile.adjacent_mines }
         end
 
         puts "  #{(0..8).to_a.join(" ")}".colorize(:red)
