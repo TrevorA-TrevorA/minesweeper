@@ -1,3 +1,4 @@
+require "colorize"
 require_relative "tile"
 
 class Board
@@ -30,8 +31,17 @@ class Board
             end
         end
 
-        puts "  #{(0..8).to_a.join(" ")}"
-        rend.each_with_index { |row, i| puts"#{i} " + row.join(" ") }
+        puts "  #{(0..8).to_a.join(" ")}".colorize(:red)
+        rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
+    end
+
+    def display_mines
+        rend = grid.map do |row| 
+            row.map { |tile| tile.mine == true ? :M : tile.adjacent_mines }
+        end
+
+        puts "  #{(0..8).to_a.join(" ")}".colorize(:red)
+        rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
     end
 
     def mine?(pos)
