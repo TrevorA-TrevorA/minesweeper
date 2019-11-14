@@ -22,8 +22,13 @@ class Game
         x, y = get_coordinates
         @selected_tile = self.board[x, y]
 
-        puts "press S to select or F to flag"
-        gets.chomp.match?(/F/i) ? flag : select
+        if selected_tile.flagged == true
+            puts "Press U to unflag or ENTER to choose new coordinates"
+            gets.chomp.match?(/U/i) ? unflag : turn
+        else
+            puts "press S to select or F to flag"
+            gets.chomp.match?(/F/i) ? flag : select
+        end
     end
 
     def select
@@ -43,6 +48,11 @@ class Game
 
     def flag
         selected_tile.flagged = true
+        turn
+    end
+
+    def unflag
+        selected_tile.flagged = false
         turn
     end
 
