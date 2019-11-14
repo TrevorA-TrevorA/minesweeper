@@ -6,10 +6,10 @@ class Board
     attr_accessor :grid
     attr_reader :tiles
 
-    def initialize
+    def initialize(game)
         @grid = Array.new(9){Array.new(9){Tile.new(self)}}
         @tiles = tile_list
-        @game = Game.new(self)
+        @game = game
     end
 
     def set
@@ -25,7 +25,7 @@ class Board
     end
 
     def set_mines
-        until grid.flatten.count { |tile| tile.mine == true } == 27 do
+        until grid.flatten.count { |tile| tile.mine == true } == 18 do
             plant_mine([rand(8), rand(8)])
         end
     end
