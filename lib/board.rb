@@ -46,8 +46,14 @@ class Board
             end
         end
 
+        remaining = tiles.count { |tile| tile.mine == false && tile.status == "hidden" }
+        unflagged = tiles.count { |tile| tile.mine == true && tile.flagged == false }
+
         puts "  #{(0..8).to_a.join(" ")}".colorize(:red)
         rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
+        puts "_________________"
+        puts "remaining squares: " + "#{remaining}"
+        puts "unflagged mines: " + "#{unflagged}"
     end
 
     def display_mines

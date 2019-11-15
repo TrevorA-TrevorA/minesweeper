@@ -36,10 +36,14 @@ class Game
         self.board.set
         turn until won? || game_over?
         puts "YOU WIN" if won?
-        if game_over?
-            puts "GAME OVER"
-            board.display_mines
-        end
+        game_over_display if game_over?
+    end
+
+    def game_over_display
+        system("clear")
+        puts "GAME OVER"
+        puts "\n"
+        board.display_mines
     end
 
     def select
