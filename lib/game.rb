@@ -4,10 +4,12 @@ require_relative "tile"
 class Game
 
     attr_accessor :selected_tile
-    attr_reader :board
+    attr_reader :board, :size
 
-    def initialize
-        @board = Board.new(self)
+    def initialize(size = 9, mines = 18)
+        @board = Board.new(self, size, mines)
+        @mines = mines
+        @size = size
         @selected_tile
     end
 
@@ -97,9 +99,21 @@ class Game
 
     def valid_coords?(coords)
         x, y = coords
-        (0..8).to_a.include?(x) && 
-        (0..8).to_a.include?(y) &&
+        (0..size - 1).to_a.include?(x) && 
+        (0..size - 1).to_a.include?(y) &&
         board[x, y].status = "hidden"
     end
 
+end
+
+if __FILE__ == $PROGRAM_NAME
+
+    puts "Enter board size:"    
+    size = gets.chomp.to_i
+    system("clear")
+    puts "Enter number of mines:"
+    mines = gets.chomp.to_i
+
+    game = Game.new(size, mines)
+    game.run
 end

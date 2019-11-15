@@ -4,12 +4,14 @@ require_relative "tile"
 class Board
 
     attr_accessor :grid
-    attr_reader :tiles
+    attr_reader :tiles, :mines, :size
 
-    def initialize(game)
-        @grid = Array.new(9){Array.new(9){Tile.new(self)}}
-        @tiles = tile_list
+    def initialize(game, size = 9, mines = 18)
+        @grid = Array.new(size){Array.new(size){Tile.new(self)}}
         @game = game
+        @size = size
+        @mines = mines
+        @tiles = tile_list
     end
 
     def set
@@ -19,14 +21,14 @@ class Board
     end
 
     def set_mine_count
-        (0..8).each do |row|
-            (0..8).each { |col| self[row, col].mine_count }
+        (0..size - 1).each do |row|
+            (0..size - 1).each { |col| self[row, col].mine_count }
         end
     end
 
     def set_mines
-        until grid.flatten.count { |tile| tile.mine == true } == 18 do
-            plant_mine([rand(8), rand(8)])
+        until grid.flatten.count { |tile| tile.mine == true } == mines do
+            plant_mine([rand(size - 1), rand(size - 1)])
         end
     end
 
@@ -49,11 +51,18 @@ class Board
         remaining = tiles.count { |tile| tile.mine == false && tile.status == "hidden" }
         unflagged = tiles.count { |tile| tile.mine == true && tile.flagged == false }
 
-        puts "  #{(0..8).to_a.join(" ")}".colorize(:red)
-        rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
-        puts "_________________"
-        puts "remaining squares: " + "#{remaining}"
-        puts "unflagged mines: " + "#{unflagged}"
+        if size <= 10
+            puts "  #{(0..size - 1).to_a.join(" ")}".colorize(:red) 
+            rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
+            puts "\n"
+            puts "remaining squares: " + "#{remaining}"
+            puts "unflagged mines: " + "#{unflagged}"
+        else
+            rend.each_with_index { |row, i| puts row.join(" ") }
+            puts "\n"
+            puts "remaining squares: " + "#{remaining}"
+            puts "unflagged mines: " + "#{unflagged}"
+        end
     end
 
     def display_mines
@@ -61,8 +70,12 @@ class Board
             row.map { |tile| tile.mine == true ? "*" : tile.adjacent_mines }
         end
 
-        puts "  #{(0..8).to_a.join(" ")}".colorize(:red)
-        rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
+        if size <= 10
+            puts "  #{(0..size - 1).to_a.join(" ")}".colorize(:red)
+            rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
+        else
+            rend.each_with_index { |row, i| puts row.join(" ") }
+        end
     end
 
     def mine?(pos)
@@ -75,15 +88,15 @@ class Board
     end
 
     def position
-        (0..8).each do |row|
-            (0..8).each { |col| grid[row][col].position = [row, col] }
+        (0..size - 1).each do |row|
+            (0..size - 1).each { |col| grid[row][col].position = [row, col] }
         end
     end
 
     def tile_list
         list = []
-        (0..8).each do |row|
-            (0..8).each { |col| list << self[row, col] }
+        (0..size - 1).each do |row|
+            (0..size - 1).each { |col| list << self[row, col] }
         end
         list
     end

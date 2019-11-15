@@ -40,8 +40,8 @@ class Tile
 
     def mine_count
         adjacent = []
-        (0..8).each do |row|
-            (0..8).each do |col|
+        (0..board.size - 1).each do |row|
+            (0..board.size - 1).each do |col|
                 adjacent << board[row, col] if self.adjacent?([row, col])
             end
         end
