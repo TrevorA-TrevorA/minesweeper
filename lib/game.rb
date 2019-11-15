@@ -25,6 +25,7 @@ class Game
         if selected_tile.flagged == true
             puts "Press U to unflag or ENTER to choose new coordinates"
             gets.chomp.match?(/U/i) ? unflag : turn
+            turn
         else
             puts "press S to select or F to flag"
             gets.chomp.match?(/F/i) ? flag : select
@@ -33,34 +34,36 @@ class Game
 
     def run
         self.board.set
-        turn
+        turn until won? || game_over?
+        puts "YOU WIN" if won?
+        if game_over?
+            puts "GAME OVER"
+            board.display_mines
+        end
     end
 
     def select
-        if selected_tile.mine == false
-            reveal
-            clear_adjacent if !adjacent_mines?
-            puts "YOU WIN" if won?
-            turn if !won?
-        else
-            puts "Game Over"
-            board.display_mines
-            game_over = true
-        end
+        reveal
+        return if game_over?
+        clear_adjacent if !adjacent_mines?
     end
 
     def reveal
         selected_tile.status = "revealed"
     end
 
+    def game_over?
+        board.tiles.any? do |tile|
+            tile.status == "revealed" && tile.mine == true
+        end
+    end
+
     def flag
         selected_tile.flagged = true
-        turn
     end
 
     def unflag
         selected_tile.flagged = false
-        turn
     end
 
     def clear_adjacent

@@ -41,7 +41,7 @@ class Board
                 if tile.status == "hidden"
                     tile.flagged == false ? "_" : :F
                 else
-                    tile.adjacent_mines
+                    tile.mine == false ? tile.adjacent_mines : "*"
                 end
             end
         end
