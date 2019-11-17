@@ -4,7 +4,7 @@ require_relative "tile"
 class Board
 
     attr_accessor :grid
-    attr_reader :tiles, :mines, :size
+    attr_reader :tiles, :mines, :size, :game
 
     def initialize(game, size = 9, mines = 18)
         @grid = Array.new(size){Array.new(size){Tile.new(self)}}
@@ -41,7 +41,7 @@ class Board
        rend = grid.map do |row| 
             row.map do |tile|
                 if tile.status == "hidden"
-                    tile.flagged == false ? "_" : :F
+                    tile.flagged == false ? (tile == game.selected_tile ? "?" : "_") : :F
                 else
                     tile.mine == false ? tile.adjacent_mines : "*"
                 end

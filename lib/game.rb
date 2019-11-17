@@ -1,3 +1,4 @@
+require "io/console"
 require_relative "board"
 require_relative "tile"
 
@@ -19,18 +20,23 @@ class Game
     end
 
     def turn
+        @selected_tile = nil
         system("clear")
         board.render
+        prompt
         x, y = get_coordinates
         @selected_tile = self.board[x, y]
+
+        system("clear")
+        board.render
+        puts "\n"
 
         if selected_tile.flagged == true
             puts "Press U to unflag or ENTER to choose new coordinates"
             gets.chomp.match?(/U/i) ? unflag : turn
             turn
         else
-            puts "press S to select or F to flag"
-            gets.chomp.match?(/F/i) ? flag : select
+            options
         end
     end
 
@@ -39,6 +45,28 @@ class Game
         turn until won? || game_over?
         puts "YOU WIN" if won?
         game_over_display if game_over?
+    end
+
+    def options
+        system("clear")
+        board.render
+        puts "press S to select" 
+        puts "Press F to flag"
+        puts "Press ENTER to choose new coordinates"
+
+        input = gets
+        case input
+        when "s\n" || "S\n"
+            select
+        when "f\n" || "F\n"
+            flag
+        when "\n"
+            turn
+        else
+            puts "Invalid Entry"
+            sleep(1)
+            options
+        end
     end
 
     def game_over_display
@@ -86,8 +114,11 @@ class Game
         adjacent.any? { |tile| tile.mine == true }
     end
 
-    def get_coordinates
+    def prompt
         puts "Enter coordinates:"
+    end
+
+    def get_coordinates
         coords = gets.chomp.split(",").map(&:to_i)
         if valid_coords?(coords)
             return coords
