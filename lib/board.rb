@@ -1,5 +1,6 @@
 require "colorize"
 require_relative "tile"
+require_relative "game"
 
 class Board
 
@@ -36,9 +37,41 @@ class Board
         x, y = pos
         grid[x][y].mine = true
     end
+
+    def display_selector
+        rend = grid.map do |row| 
+            row.map do |tile|
+                if tile == game.selector
+                    tile == game.selected_tile ? "?" : "+"
+                else
+                    if tile.status == "hidden"
+                        tile.flagged == false ? (tile == game.selected_tile ? "?" : "_") : :F
+                    else
+                        tile.mine == false ? tile.adjacent_mines : "*"
+                    end
+                end
+            end
+        end
+        remaining = tiles.count { |tile| tile.mine == false && tile.status == "hidden" }
+        mines = tiles.count { |tile| tile.mine == true }
+        flagged = tiles.count { |tile| tile.flagged == true }
+
+        if size <= 10
+            puts "  #{(0..size - 1).to_a.join(" ")}".colorize(:red) 
+            rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
+            puts "\n"
+            puts "remaining squares: " + "#{remaining}"
+            puts "remaining mines?: " + "#{mines - flagged}"
+        else
+            rend.each_with_index { |row, i| puts row.join(" ") }
+            puts "\n"
+            puts "remaining squares: " + "#{remaining}"
+            puts "remaining mines?: " + "#{mines - flagged}"
+        end
+    end
     
     def render
-       rend = grid.map do |row| 
+        rend = grid.map do |row| 
             row.map do |tile|
                 if tile.status == "hidden"
                     tile.flagged == false ? (tile == game.selected_tile ? "?" : "_") : :F
@@ -49,19 +82,20 @@ class Board
         end
 
         remaining = tiles.count { |tile| tile.mine == false && tile.status == "hidden" }
-        unflagged = tiles.count { |tile| tile.mine == true && tile.flagged == false }
+        mines = tiles.count { |tile| tile.mine == true }
+        flagged = tiles.count { |tile| tile.flagged == true }
 
         if size <= 10
             puts "  #{(0..size - 1).to_a.join(" ")}".colorize(:red) 
             rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
             puts "\n"
             puts "remaining squares: " + "#{remaining}"
-            puts "unflagged mines: " + "#{unflagged}"
+            puts "remaining mines?: " + "#{mines - flagged}"
         else
             rend.each_with_index { |row, i| puts row.join(" ") }
             puts "\n"
             puts "remaining squares: " + "#{remaining}"
-            puts "unflagged mines: " + "#{unflagged}"
+            puts "remaining mines?: " + "#{mines - flagged}"
         end
     end
 
