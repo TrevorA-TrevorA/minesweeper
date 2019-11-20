@@ -31,7 +31,9 @@ class Game
         board.render
         puts "\n"
 
-        selected_tile.flagged == true ? flag_options : options
+        if selected_tile
+            selected_tile.flagged == true ? flag_options : options
+        end
     end
 
     def run
@@ -71,7 +73,7 @@ class Game
         case input
         when "s" || "S"
             select
-            return if won? || game_over?
+            return
         when "f" || "F"
             flag
         when "\r"
@@ -192,7 +194,14 @@ class Game
 
     def select_tile
         x, y = @selector.position
-        @selected_tile = self.board[x, y]
+
+        if valid_coords?([x, y])
+            @selected_tile = self.board[x, y]
+        else
+            puts "INVALID ENTRY"
+            sleep(1)
+        end
+
         system("clear")
         board.render
     end
@@ -227,7 +236,7 @@ class Game
             x, y = coords
             @selected_tile = self.board[x, y]
         else
-            puts "invalid entry"
+            puts "INVALID ENTRY"
             turn
         end
     end
@@ -236,7 +245,7 @@ class Game
         x, y = coords
         (0..size - 1).to_a.include?(x) && 
         (0..size - 1).to_a.include?(y) &&
-        board[x, y].status = "hidden"
+        board[x, y].status == "hidden"
     end
 
 end
