@@ -44,15 +44,16 @@ class Game
         game_over_display if game_over?
     end
 
+    def reset
+        system("clear")
+        system("ruby game.rb")
+    end
+
     def flag_options
         puts "Press U to unflag or ENTER to choose new coordinates"
             case STDIN.raw { |i| i.read(1) }
-            when "U"
+            when "u" || "U"
                 unflag
-                turn
-            when "u"
-                unflag
-                turn
             when "\r"
                 turn
             else
@@ -131,20 +132,28 @@ class Game
     end
 
     def prompt
-        puts "Press A to navigate with arrow keys or C to enter coordinates:"
+        puts "Press A to navigate with arrow keys"
+        puts "Press C to enter coordinates:"
+        puts "Press R to reset"
+        puts "Press Q to quit"
+    end
+
+    def quit
+        system("clear")
+        exit
     end
 
     def receive_input
         input = STDIN.raw { |i| i.read(1) }
         case input
-        when "a"
+        when "a" || "A"
             arrows
-        when "A"
-            arrows
-        when "c"
+        when "c" || "C"
             get_coordinates
-        when "C"
-            get_coordinates
+        when "r" || "R"
+            reset
+        when "q" || "Q"
+            quit
         else
             puts "INVALID ENTRY"
             turn 
