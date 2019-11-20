@@ -21,7 +21,7 @@ class Game
     end
 
     def turn
-        @selected_tile = nil
+       
         system("clear")
         board.render
         prompt
@@ -34,6 +34,7 @@ class Game
         if selected_tile
             selected_tile.flagged == true ? flag_options : options
         end
+         @selected_tile = nil
     end
 
     def run
