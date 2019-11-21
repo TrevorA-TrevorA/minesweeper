@@ -60,12 +60,12 @@ class Board
             puts "  #{(0..size - 1).to_a.join(" ")}".colorize(:red) 
             rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
             puts "\n"
-            puts "remaining squares: " + "#{remaining}"
+            puts "remaining cells: " + "#{remaining}"
             puts "remaining mines?: " + "#{mines - flagged}"
         else
             rend.each_with_index { |row, i| puts row.join(" ") }
             puts "\n"
-            puts "remaining squares: " + "#{remaining}"
+            puts "remaining cells: " + "#{remaining}"
             puts "remaining mines?: " + "#{mines - flagged}"
         end
     end
@@ -89,12 +89,12 @@ class Board
             puts "  #{(0..size - 1).to_a.join(" ")}".colorize(:red) 
             rend.each_with_index { |row, i| puts"#{i} ".colorize(:red) + row.join(" ") }
             puts "\n"
-            puts "remaining squares: " + "#{remaining}"
+            puts "remaining cells: " + "#{remaining}"
             puts "remaining mines?: " + "#{mines - flagged}"
         else
             rend.each_with_index { |row, i| puts row.join(" ") }
             puts "\n"
-            puts "remaining squares: " + "#{remaining}"
+            puts "remaining cells: " + "#{remaining}"
             puts "remaining mines?: " + "#{mines - flagged}"
         end
     end
