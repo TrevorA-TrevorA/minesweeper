@@ -86,6 +86,7 @@ class Game
         when "f" || "F"
             flag
         when "\r"
+            @selected_tile = nil
             turn
         else
             puts "INVALID ENTRY"
@@ -255,7 +256,6 @@ class Game
             @selected_tile = self.board[x, y]
         else
             puts "INVALID ENTRY"
-            turn
         end
     end
 
