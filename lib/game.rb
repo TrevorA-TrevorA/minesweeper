@@ -49,6 +49,13 @@ class Game
         system("ruby game.rb")
     end
 
+    def self.title
+        system("clear")
+        puts "\t\t\tTrevor's Minesweeper Game"
+        sleep(1)
+        system("clear")
+    end
+
     def flag_options
         puts "Press U to unflag or ENTER to choose new coordinates"
             case STDIN.raw { |i| i.read(1) }
@@ -239,7 +246,8 @@ class Game
     def get_coordinates
         system("clear")
         board.render
-        puts "Enter coordinates:"
+        puts "rows and columns are numbered 0 to #{size - 1}"
+        puts "Enter coordinates (e.g. 5,10):"
         input = gets.chomp
         coords = input.split(",").map(&:to_i)
         if valid_coords?(coords)
@@ -261,8 +269,8 @@ class Game
 end
 
 if __FILE__ == $PROGRAM_NAME
-
-    puts "Enter board size:"    
+    Game.title
+    puts "Enter board size (e.g. enter 20 for a 20x20 board):"    
     size = gets.chomp.to_i
     system("clear")
     puts "Enter number of mines:"
