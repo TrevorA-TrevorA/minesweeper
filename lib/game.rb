@@ -1,3 +1,4 @@
+require "yaml"
 require "io/console"
 require_relative "board"
 require_relative "tile"
@@ -15,13 +16,23 @@ class Game
         @selector
     end
 
+    def self.new_game
+        puts "Enter board size (e.g. enter 20 for a 20x20 board):"    
+        size = gets.chomp.to_i
+        system("clear")
+        puts "Enter number of mines:"
+        mines = gets.chomp.to_i
+
+        game = Game.new(size, mines)
+        game.run
+    end
+
     def won?
         mineless_tiles = board.tiles.select { |tile| tile.mine == false }
         mineless_tiles.all? { |tile| tile.status == "revealed" }
     end
 
     def turn
-       
         system("clear")
         board.render
         prompt
@@ -35,6 +46,20 @@ class Game
             selected_tile.flagged == true ? flag_options : options
         end
          @selected_tile = nil
+    end
+
+    def self.new_or_saved
+        puts "Press N to start a new game"
+        puts "Press R to resume a saved game"
+
+        input = STDIN.raw{ |i| i.read(1) }
+
+        case input
+        when "n" || "N"
+            Game.new_game
+        when "r" || "R"
+            Game.resume_saved
+        end
     end
 
     def run
@@ -142,8 +167,22 @@ class Game
     def prompt
         puts "Press A to navigate with arrow keys"
         puts "Press C to enter coordinates:"
+        puts "Press S to save"
         puts "Press R to reset"
         puts "Press Q to quit"
+    end
+
+    def save
+        saved = self.to_yaml
+        File.write('./saved_game', saved)
+        puts "SAVED"
+        sleep(1)
+    end
+
+    def self.resume_saved
+        saved = File.open('saved_game')
+        game = YAML.load(saved)
+        game.run
     end
 
     def quit
@@ -158,6 +197,8 @@ class Game
             arrows
         when "c" || "C"
             get_coordinates
+        when "s" || "S"
+            save
         when "r" || "R"
             reset
         when "q" || "Q"
@@ -270,12 +311,5 @@ end
 
 if __FILE__ == $PROGRAM_NAME
     Game.title
-    puts "Enter board size (e.g. enter 20 for a 20x20 board):"    
-    size = gets.chomp.to_i
-    system("clear")
-    puts "Enter number of mines:"
-    mines = gets.chomp.to_i
-
-    game = Game.new(size, mines)
-    game.run
+    Game.new_or_saved
 end
