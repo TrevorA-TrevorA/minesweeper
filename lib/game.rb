@@ -17,6 +17,7 @@ class Game
     end
 
     def self.new_game
+        system("clear")
         puts "Enter board size (e.g. enter 20 for a 20x20 board):"    
         size = gets.chomp.to_i
         system("clear")
