@@ -19,11 +19,16 @@ class Game
 
     def self.new_game
         system("clear")
-        puts "Enter board size (e.g. enter 20 for a 20x20 board):"    
-        size = gets.chomp.to_i
+        puts "Enter board size (e.g. enter 20 for a 20x20 board):"  
+
+        input = gets.chomp
+        input.match?(/\d/) ? size = input.to_i : size = 9
+
         system("clear")
         puts "Enter number of mines:"
-        mines = gets.chomp.to_i
+
+        input = gets.chomp
+        input.match?(/\d/) ? mines = input.to_i : mines = 18
 
         game = Game.new(size, mines)
         game.run
@@ -61,6 +66,13 @@ class Game
             Game.new_game
         when "r" || "R"
             Game.resume_saved
+        when "\e"
+            exit
+        else
+            puts "INVALID ENTRY"
+            sleep(1)
+            system("clear")
+            Game.new_or_saved
         end
     end
 
@@ -182,7 +194,7 @@ class Game
     def self.resume_saved
         saved = File.open('saved_game')
         game = YAML.load(saved)
-        game.run
+        game ? game.run : Game.new_game
     end
 
     def quit
