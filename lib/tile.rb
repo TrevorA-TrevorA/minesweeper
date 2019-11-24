@@ -14,39 +14,29 @@ class Tile
         @adjacent_mines = 0
     end
 
-    def adjacent?(pos)
+    def valid?(pos)
+        x, y = pos
+        return false if !(0...board.size).to_a.include?(x)
+        return false if !(0...board.size).to_a.include?(y)
+        true
+    end
+
+    def adjacent
+        adj = []
         x, y = self.position
-        
-        case pos
-        when [x - 1, y]
-            return true
-        when [x + 1, y]
-            return true
-        when [x, y - 1]
-            return true
-        when [x, y + 1]
-            return true
-        when [x - 1, y + 1]
-            return true
-        when [x - 1, y - 1]
-            return true
-        when [x + 1, y + 1]
-            return true
-        when [x + 1, y - 1]
-            return true
-        else
-            false
-        end
+        adj << board[x - 1, y] if valid?([x - 1, y])
+        adj << board[x + 1, y] if valid?([x + 1, y])
+        adj << board[x, y - 1] if valid?([x, y - 1])
+        adj << board[x, y + 1] if valid?([x, y + 1])
+        adj << board[x - 1, y - 1] if valid?([x - 1, y - 1])
+        adj << board[x - 1, y + 1] if valid?([x - 1, y + 1])
+        adj << board[x + 1, y - 1] if valid?([x + 1, y - 1])
+        adj << board[x + 1, y + 1] if valid?([x + 1, y + 1])
+        adj
     end
 
     def mine_count
-        adjacent = []
-        (0..board.size - 1).each do |row|
-            (0..board.size - 1).each do |col|
-                adjacent << board[row, col] if self.adjacent?([row, col])
-            end
-        end
-        @adjacent_mines = adjacent.count{ |tile| tile.mine == true }
+       @adjacent_mines = self.adjacent.count { |tile| tile.mine == true }
     end
 
 end

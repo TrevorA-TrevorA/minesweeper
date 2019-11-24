@@ -1,3 +1,4 @@
+require "securerandom"
 require "colorize"
 require_relative "tile"
 require_relative "game"
@@ -17,25 +18,17 @@ class Board
 
     def set
         position
-        set_mines
+        plant_mines(mines)
         set_mine_count
     end
 
     def set_mine_count
-        (0..size - 1).each do |row|
-            (0..size - 1).each { |col| self[row, col].mine_count }
-        end
+        tiles.each { |tile| tile.mine_count }
     end
 
-    def set_mines
-        until grid.flatten.count { |tile| tile.mine == true } == mines do
-            plant_mine([rand(size - 1), rand(size - 1)])
-        end
-    end
-
-    def plant_mine(pos)
-        x, y = pos
-        grid[x][y].mine = true
+    def plant_mines(mines)
+        mined = tiles.sample(mines, random: SecureRandom)
+        mined.map!{ |tile| tile.mine = true }
     end
 
     def display_selector

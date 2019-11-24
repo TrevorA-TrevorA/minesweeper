@@ -1,3 +1,4 @@
+require "benchmark"
 require "yaml"
 require "io/console"
 require_relative "board"
@@ -6,7 +7,7 @@ require_relative "tile"
 class Game
 
     attr_accessor :selected_tile, :selector
-    attr_reader :board, :size
+    attr_reader :board, :size, :mines
 
     def initialize(size = 9, mines = 18)
         @board = Board.new(self, size, mines)
@@ -64,7 +65,7 @@ class Game
     end
 
     def run
-        self.board.set
+        self.board.set if self.board.tiles.all? { |tile| tile.status == "hidden" }
         turn until won? || game_over?
         puts "YOU WIN" if won?
         game_over_display if game_over?
@@ -156,9 +157,7 @@ class Game
     end
 
     def adjacent
-        self.board.tiles.select do |tile| 
-            selected_tile.adjacent?(tile.position) 
-        end
+        selected_tile.adjacent
     end
 
     def adjacent_mines?
@@ -303,8 +302,8 @@ class Game
 
     def valid_coords?(coords)
         x, y = coords
-        (0..size - 1).to_a.include?(x) && 
-        (0..size - 1).to_a.include?(y) &&
+        (0...size).to_a.include?(x) && 
+        (0...size).to_a.include?(y) &&
         board[x, y].status == "hidden"
     end
 
