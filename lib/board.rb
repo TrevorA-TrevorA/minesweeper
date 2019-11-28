@@ -31,20 +31,25 @@ class Board
         mined.map!{ |tile| tile.mine = true }
     end
 
+    def tile_appearance(tile)
+        if tile.status == "hidden"
+            tile.flagged == false ? (tile == game.selected_tile ? "?" : "_") : "F".colorize(:light_black)
+        else
+            tile.mine == false ? tile.adjacent_mines : "*"
+        end
+    end
+
+    def selector_appearance(tile)
+        tile == game.selected_tile ? "?" : "+"
+    end
+
     def display_selector
         rend = grid.map do |row| 
-            row.map do |tile|
-                if tile == game.selector
-                    tile == game.selected_tile ? "?" : "+"
-                else
-                    if tile.status == "hidden"
-                        tile.flagged == false ? (tile == game.selected_tile ? "?" : "_") : :F
-                    else
-                        tile.mine == false ? tile.adjacent_mines : "*"
-                    end
-                end
+            row.map do |tile| 
+                tile == game.selector ? selector_appearance(tile) : tile_appearance(tile)
             end
         end
+
         remaining = tiles.count { |tile| tile.mine == false && tile.status == "hidden" }
         mines = tiles.count { |tile| tile.mine == true }
         flagged = tiles.count { |tile| tile.flagged == true }
@@ -56,7 +61,7 @@ class Board
             puts "remaining cells: " + "#{remaining}"
             puts "remaining mines?: " + "#{mines - flagged}"
         else
-            rend.each_with_index { |row, i| puts row.join(" ") }
+            rend.each { |row| puts row.join(" ") }
             puts "\n"
             puts "remaining cells: " + "#{remaining}"
             puts "remaining mines?: " + "#{mines - flagged}"
@@ -64,15 +69,7 @@ class Board
     end
     
     def render
-        rend = grid.map do |row| 
-            row.map do |tile|
-                if tile.status == "hidden"
-                    tile.flagged == false ? (tile == game.selected_tile ? "?" : "_") : :F
-                else
-                    tile.mine == false ? tile.adjacent_mines : "*"
-                end
-            end
-        end
+        rend = grid.map { |row| row.map { |tile| tile_appearance(tile) } }
 
         remaining = tiles.count { |tile| tile.mine == false && tile.status == "hidden" }
         mines = tiles.count { |tile| tile.mine == true }
@@ -85,7 +82,7 @@ class Board
             puts "remaining cells: " + "#{remaining}"
             puts "remaining mines?: " + "#{mines - flagged}"
         else
-            rend.each_with_index { |row, i| puts row.join(" ") }
+            rend.each { |row| puts row.join(" ") }
             puts "\n"
             puts "remaining cells: " + "#{remaining}"
             puts "remaining mines?: " + "#{mines - flagged}"
