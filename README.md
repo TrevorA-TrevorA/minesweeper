@@ -7,9 +7,10 @@ Begin by entering the board (grid) size, which is the square root of the desired
 Input:
 
 Navigate with arrow keys (or enter numeric coordinates if you prefer).
--Q to quit
--R to reset
--S to save (one saved state)
+
+Press Q to quit<br/>
+Press R to reset<br/>
+Press S to save
 
 Status:
 
