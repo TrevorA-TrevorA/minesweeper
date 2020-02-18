@@ -85,7 +85,7 @@ class Game
 
     def reset
         system("clear")
-        system("ruby game.rb")
+        Game.new_game
     end
 
     def self.title
