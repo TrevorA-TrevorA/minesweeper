@@ -18,7 +18,10 @@ Remining mines?: shows the total number of mines minus the total number of flags
 
 Comments: there are no tests written for this game, since I had not yet learned how to use rspec when I created this. However, it does work. Enjoy.
 
+Images:
 
-
+<img src="./images/trevors_minesweeper.jpg" width="550">
+<img src="./images/trevors_minesweeper2.jpg" width="550">
+<img src="./images/trevors_minesweeper3.jpg" width="550">
 
 
