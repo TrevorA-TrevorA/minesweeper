@@ -223,9 +223,13 @@ class Game
     end
 
     def self.resume_saved
-        saved = File.open('saved_game')
-        game = YAML.load(saved)
-        game ? game.run : Game.new_game
+        if File.exist?('saved_game')
+            saved = File.open('saved_game')
+            game = YAML.load(saved)
+            game.run
+        else
+            Game.new_game
+        end
     end
 
     def quit
