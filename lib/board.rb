@@ -33,7 +33,7 @@ class Board
 
     def tile_appearance(tile)
         if tile.status == "hidden"
-            tile.flagged == false ? (tile == game.selected_tile ? "?" : "_") : "F".colorize(:light_black)
+            tile.flagged == false ? (tile == game.selected_tile ? "?" : "_") : "F"
         else
             tile.mine == false ? tile.adjacent_mines : "*"
         end
