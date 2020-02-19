@@ -21,8 +21,8 @@ Comments: there are no tests written for this game, since I had not yet learned 
 
 Images:
 
-<img src="./images/trevors_minesweeper.jpg" width="550">
-<img src="./images/trevors_minesweeper2.jpg" width="550">
-<img src="./images/trevors_minesweeper3.jpg" width="550">
+<img src="./images/trevors_minesweeper4.jpg" width="550">
+<img src="./images/trevors_minesweeper5.jpg" width="550">
+<img src="./images/trevors_minesweeper7.jpg" width="550">
 
 
