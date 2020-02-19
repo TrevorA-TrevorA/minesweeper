@@ -9,6 +9,9 @@ class Game
     attr_accessor :selected_tile, :selector
     attr_reader :board, :size, :mines
 
+    @@size
+    @@mines
+
     def initialize(size = 9, mines = 18)
         @board = Board.new(self, size, mines)
         @mines = mines
@@ -17,20 +20,48 @@ class Game
         @selector
     end
 
-    def self.new_game
+    def self.get_size
         system("clear")
         puts "Enter board size (e.g. enter 20 for a 20x20 board):"  
 
         input = gets.chomp
-        input.match?(/\d/) ? size = input.to_i : size = 9
+        input.match?(/\d/) ? num = input.to_i : num = 9
 
+        if size < 0
+            puts "Board size must be greater than zero."
+            sleep(1.5)
+            Game.get_size
+        else
+            @@size = num
+        end
+    end
+
+    def self.get_mines
         system("clear")
         puts "Enter number of mines:"
 
         input = gets.chomp
-        input.match?(/\d/) ? mines = input.to_i : mines = 18
+        input.match?(/\d/) ? num = input.to_i : num = 18
 
-        game = Game.new(size, mines)
+        if mines >= (@@size * @@size)
+            puts "Number of mines must be less than number of cells."
+            sleep(1.5)
+            Game.get_mines
+        elsif
+            mines < 0
+            puts "Number of mines must be greater than zero."
+            sleep(1.5)
+            Game.get_mines
+        else
+            @@mines = num
+        end
+    end
+
+    def self.new_game
+        system("clear")
+        Game.get_size
+        Game.get_mines
+        game = Game.new(@@size, @@mines)
         game.run
     end
 
