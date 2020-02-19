@@ -81,10 +81,10 @@ class Game
         turn until won? || game_over?
         puts "YOU WIN" if won?
         game_over_display if game_over?
+        exit
     end
 
     def reset
-        system("clear")
         Game.new_game
     end
 
