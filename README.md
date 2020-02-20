@@ -20,7 +20,7 @@ Press S to save
 
 Status:
 
-Remaining cells: displays the number of uncovered cells.
+Remaining cells: displays the number of unrevealed cells.
 
 Remining mines?: displays the total number of mines *minus* the total number of flags. If a flag is erroneously placed, this number will still decrement to avoid tipping you off. 
 
