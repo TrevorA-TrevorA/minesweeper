@@ -22,7 +22,7 @@ Status:
 
 Remaining cells: displays the number of unrevealed cells.
 
-Remining mines?: displays the total number of mines *minus* the total number of flags. If a flag is erroneously placed, this number will still decrement to avoid tipping you off. 
+Remaining mines?: displays the total number of mines *minus* the total number of flags. If a flag is erroneously placed, this number will still decrement to avoid tipping you off. 
 
 Comments: there are no tests written for this game, since I had not yet learned how to write tests when I created this. However, I tested it manually in pry, and it works. Enjoy.
 
