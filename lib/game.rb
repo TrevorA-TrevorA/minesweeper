@@ -262,7 +262,11 @@ class Game
         board.display_selector
         STDIN.raw!
         input = STDIN.getc
-        input << STDIN.read_nonblock(2) if input == "\e"
+
+        if input == "\e"
+            input << STDIN.read_nonblock(2) rescue nil
+        end
+        
         STDIN.cooked!
         navigate(input)
     end
